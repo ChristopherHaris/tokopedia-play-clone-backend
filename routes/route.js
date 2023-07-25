@@ -13,9 +13,13 @@ router.post('/video/product', controller.addProduct);
 
 router.post('/video/comment', controller.addComment);
 
-router.get('/video', controller.getVideo);
+router.get('/video', controller.getAllVideo);
 
-router.get('/video/thumbnail', controller.getThumbnail);
+router.get('/video/thumbnail', controller.getAllThumbnail);
+
+router.get('/video/:id', controller.getVideo);
+
+router.get('/video/thumbnail/:id', controller.getThumbnail);
 
 router.get('/video/product/:id', controller.getProductList);
 

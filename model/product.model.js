@@ -14,7 +14,7 @@ const productSchema = new Schema({
         type: Number,
         required: true,
     },
-    videoid: {
+    video_id: {
         type: String,
         required: true,
     }

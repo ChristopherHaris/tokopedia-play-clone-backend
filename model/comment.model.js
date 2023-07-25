@@ -14,7 +14,7 @@ const commentSchema = new Schema({
     videoid: {
         type: String,
         required: true,
-    }
-}, {versionKey: false});
+    },
+}, { timestamps: { createdAt: 'created_at' } }, {versionKey: false});
 
 module.exports = mongoose.model('Comment', commentSchema)

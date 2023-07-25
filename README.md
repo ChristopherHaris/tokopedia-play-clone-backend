@@ -7,8 +7,9 @@ This Readme document provides an overview of the database structure and API arch
 Our application utilizes a non relational database (MongoDB) to store relevant data. The database is designed with the following structure:
 
 Videos Collection :
+| Method | Endpoint                                     | Description                                      |
 | ------ | -------------------------------------------- | ------------------------------------------------ |
-| _id    | `/playlists`                                 | Get the list of all playlists                    |
+| GET    | `/playlists`                                 | Get the list of all playlists                    |
 | GET    | `/playlists/:playlistId`                     | Get details of a specific playlist               |
 | GET    | `/playlists/:playlistId?sort_by=played`      | Sort tracks in a specific playlist by play count |
 | POST   | `/playlists`                                 | Create a new playlist                            |

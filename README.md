@@ -6,23 +6,15 @@ This Readme document provides an overview of the database structure and API arch
 ## Database Structure
 Our application utilizes a non relational database (MongoDB) to store relevant data. The database is designed with the following structure:
 
-Videos Collection :
-| Method | Endpoint                                     | Description                                      |
-| ------ | -------------------------------------------- | ------------------------------------------------ |
-| GET    | `/playlists`                                 | Get the list of all playlists                    |
-| GET    | `/playlists/:playlistId`                     | Get details of a specific playlist               |
-| GET    | `/playlists/:playlistId?sort_by=played`      | Sort tracks in a specific playlist by play count |
-| POST   | `/playlists`                                 | Create a new playlist                            |
-| PUT    | `/playlists/:playlistId`                     | Update details of a specific playlist            |
-| DELETE | `/playlists/:playlistId`                     | Delete a specific playlist                       |
-| GET    | `/playlists/:playlistId/tracks/:songId`      | Get details of a specific song from a playlist   |
-| GET    | `/playlists/:playlistId/tracks/:songId/play` | Play a song from a playlist                      |
-| POST   | `/playlists/:playlistId/tracks`              | Add a song to a specific playlist                |
-| DELETE | `/playlists/:playlistId/tracks/:songId`      | Remove a specific song from a playlist           |
-user_id (Primary Key): Unique identifier for each user.
-username: The username chosen by the user for their account.
-email: The email address associated with the user's account.
-password: Hashed password for account security.
+### Videos Collection :
+
+| #             | Type                                         | Description                                      |
+| ------------- | -------------------------------------------- | ------------------------------------------------ |
+| _id           | `ObjectID()`                                 | An automatically assigned id by mongodb          |
+| thumbnailurl  | `String`                                     | The URL of the video's thumbnail                 |
+| videourl      | `String`                                     | The URL of the video                             |
+| title         | `String`                                     | the video's title                                |
+
 Posts Table:
 
 post_id (Primary Key): Unique identifier for each post.

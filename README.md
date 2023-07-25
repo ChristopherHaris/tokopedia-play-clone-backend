@@ -1,6 +1,5 @@
 # tokopedia-play-clone-backend
 
-## Project Readme
 This Readme document provides an overview of the database structure and API architecture for our project. It also includes instructions on how to run the API locally, ensuring that it can easily run on your local machine.
 
 ## Database Structure
@@ -286,7 +285,7 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
   ]
   ```
 
-  **POST /video/comment**
+**POST /video/comment**
 ----
   Creates a new User and returns the new object.
 * **URL Params**  
@@ -315,14 +314,29 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
   ]
   ``` 
 
-iv. How to Run Locally
+## How to Run Locally
 To run the API on your local machine, please follow these steps:
 
-Clone the project repository from GitHub.
-Ensure you have Node.js and npm (Node Package Manager) installed.
-Install the project dependencies by running: npm install.
-Set up the database by running the provided SQL scripts to create the necessary tables and relationships.
-Configure the database connection in the project's configuration file.
-Run the application by executing: npm start.
-The API should now be accessible locally at http://localhost:3000/api/.
-Ensure that the grader can easily follow these steps and run the API on their local machine without any issues. If there are any specific instructions or environment considerations, please provide them in this section.
+**1. Clone the project repository from GitHub.**
+```bash
+git clone https://github.com/ChristopherHaris/tokopedia-play-clone-backend.git
+```
+**2. Install Dependencies:**
+Ensure you have Node.js and npm (Node Package Manager) installed. Then, navigate to the project directory and install the required dependencies by running:
+```bash
+npm install
+```
+**3. Set Up MongoDB Database:**
+* Install MongoDB on your local machine if you haven't already. You can download it from the official website: [MongoDB](https://www.mongodb.com/try/download/compass).
+* Install MongoDB compass on your system
+* Start the MongoDB compass to run the database locally.
+
+**4. Run the API:**
+Start the API by executing the following command:
+```node
+npm run start
+```
+**5. Access the API:**
+The API should now be accessible locally at 
+
+`http://localhost:3000/api/`.

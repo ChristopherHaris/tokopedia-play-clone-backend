@@ -8,68 +8,312 @@ Our application utilizes a non relational database (MongoDB) to store relevant d
 
 ### Videos Collection :
 
-| #             | Type                                         | Description                                      |
-| ------------- | -------------------------------------------- | ------------------------------------------------ |
-| _id           | `ObjectID()`                                 | An automatically assigned id by mongodb          |
-| thumbnailurl  | `String`                                     | The URL of the video's thumbnail                 |
-| videourl      | `String`                                     | The URL of the video                             |
-| title         | `String`                                     | the video's title                                |
+|              | Type                                         | Description                                      |
+| ------------ | -------------------------------------------- | ------------------------------------------------ |
+| _id          | `ObjectID()`                                 | An automatically assigned id by mongodb          |
+| thumbnailurl | `String`                                     | The URL of the video's thumbnail                 |
+| videourl     | `String`                                     | The URL of the video                             |
+| title        | `String`                                     | The title of the video                           |
 
-Posts Table:
+### Products Collection:
 
-post_id (Primary Key): Unique identifier for each post.
-user_id (Foreign Key): References the user who created the post.
-content: The content of the post.
-timestamp: The date and time when the post was created.
-Comments Table:
+|              | Type                                         | Description                                       |
+| ------------ | -------------------------------------------- | ------------------------------------------------- |
+| _id          | `ObjectID()`                                 | An automatically assigned id by mongodb           |
+| producturl   | `String`                                     | The URL of the product                            |
+| title        | `String`                                     | The product's name                                |
+| price        | `Integer`                                    | The product's price                               |
+| video_id     | `String`                                     | The ID of the video, in which the products are in |
 
-comment_id (Primary Key): Unique identifier for each comment.
-user_id (Foreign Key): References the user who wrote the comment.
-post_id (Foreign Key): References the post to which the comment belongs.
-content: The content of the comment.
-timestamp: The date and time when the comment was created.
-This database structure allows us to maintain a record of users, their posts, and the comments they make on those posts.
+### Comments Collection:
 
-ii. API Structure
+|              | Type                                         | Description                                       |
+| ------------ | -------------------------------------------- | ------------------------------------------------- |
+| _id          | `ObjectID()`                                 | An automatically assigned id by mongodb           |
+| username     | `String`                                     | The commenter's name                              |
+| comment      | `String`                                     | The message that are sent                         |
+| video_id     | `String`                                     | The ID of the video, in which the comments are in |
+
+
+## API Structure
 Our API follows a RESTful architecture, utilizing HTTP methods for communication. The endpoints are structured as follows:
 
-GET /api/posts
+**GET /video**
+----
+  Returns all videos in the system.
+* **URL Params**  
+  None
+* **Data Params**  
+  None
+* **Headers**  
+  Content-Type: application/json  
+* **Success Response:**  
+* **Code:** 200  
+  **Content:**  
+```
+[
+    {
+        "_id": ObjectID,
+        "thumbnailurl": string,
+        "videourl": string,
+        "title": string
+    },
+    {
+        "_id": ObjectID,
+        "thumbnailurl": string,
+        "videourl": string,
+        "title": string
+    }
+]
+```
+* **Error Response:**  
+  * **Code:** 404  
+  **Content:** `{ message: "No videos found." }`  
+  OR  
+  * **Code:** 500  
+  **Content:** `{ message: error.message }`
 
-Description: Fetches a list of all posts.
-Response: Array of post objects, each containing post_id, user_id, content, and timestamp.
-GET /api/posts/:post_id
+**GET /video/thumbnail**
+----
+  Returns all thumbnail in the system.
+* **URL Params**  
+  None
+* **Data Params**  
+  None
+* **Headers**  
+  Content-Type: application/json  
+* **Success Response:**  
+* **Code:** 200  
+  **Content:**  
+```
+[
+    {
+        "_id": ObjectID,
+        "thumbnailurl": string
+    },
+    {
+        "_id": ObjectID,
+        "thumbnailurl": string
+    }
+]
+```
+* **Error Response:**  
+  * **Code:** 404  
+  **Content:** `{ message: "No thumbnails found." }`  
+  OR  
+  * **Code:** 500  
+  **Content:** `{ message: "Failed to fetch thumbnails.", error: error.message }`
 
-Description: Fetches a specific post by its post_id.
-Response: Post object containing post_id, user_id, content, and timestamp.
-POST /api/posts
+**GET /video/:id**
+----
+  Returns a specific video.
+* **URL Params**  
+  *Required:* `id=[string]`
+* **Data Params**  
+  None
+* **Headers**  
+  Content-Type: application/json  
+* **Success Response:** 
+* **Code:** 200  
+  **Content:**
+```
+{
+    "_id": ObjectID,
+    "thumbnailurl": string,
+    "videourl": string,
+    "title": string
+}
+``` 
+* **Error Response:**  
+  * **Code:** 404  
+  **Content:** `{ message: "Video not found" }`  
+  OR  
+  * **Code:** 500  
+  **Content:** `{ message: error.message }`
 
-Description: Creates a new post.
-Request: JSON object containing user_id and content.
-Response: Post object of the newly created post.
-PUT /api/posts/:post_id
+**GET /video/thumbnail/:id**
+----
+  Returns a specific thumbnail.
+* **URL Params**  
+  *Required:* `id=[string]`
+* **Data Params**  
+  None
+* **Headers**  
+  Content-Type: application/json  
+* **Success Response:**  
+* **Code:** 200  
+  **Content:**  
+```
+{
+    "_id": ObjectID,
+    "thumbnailurl": string
+}
+```
+* **Error Response:**  
+  * **Code:** 404  
+  **Content:** `{ message: "Thumbnail not found." }`  
+  OR  
+  * **Code:** 500  
+  **Content:** `{ message: "Failed to fetch thumbnail.", error: error.message }`
 
-Description: Updates an existing post.
-Request: JSON object containing user_id and updated content.
-Response: Post object of the updated post.
-DELETE /api/posts/:post_id
+**GET /video/product/:id**
+----
+  Returns all product from the specified video.
+* **URL Params**  
+  *Required:* `id=[string]`
+* **Data Params**  
+  None
+* **Headers**  
+  Content-Type: application/json  
+* **Success Response:**  
+* **Code:** 200  
+  **Content:**  
+```
+[
+    {
+        "_id": ObjectID,
+        "producturl": string,
+        "title": string,
+        "price": integer
+    },
+    {
+        "_id": ObjectID,
+        "producturl": string,
+        "title": string,
+        "price": integer
+    }
+]
+```
+* **Error Response:**  
+  * **Code:** 404  
+  **Content:** `{ message: "No products found for the video." }`  
+  OR  
+  * **Code:** 500  
+  **Content:** `{ message: "Failed to fetch products.", error: error.message }`
 
-Description: Deletes a post.
-Response: Success message indicating the post was deleted successfully.
-GET /api/posts/:post_id/comments
+**GET /video/comment/:id**
+----
+  Returns all comments from the specified video.
+* **URL Params**  
+  *Required:* `id=[string]`
+* **Data Params**  
+  None
+* **Headers**  
+  Content-Type: application/json  
+* **Success Response:**  
+* **Code:** 200  
+  **Content:**  
+```
+[
+    {
+        "_id": ObjectID,
+        "username": string,
+        "comment": string,
+        "created_at": Date(),
+    },
+    {
+        "_id": ObjectID,
+        "username": string,
+        "comment": string,
+        "created_at": Date(),
+    }
+]
+```
+* **Error Response:**  
+  * **Code:** 404  
+  **Content:** `{ message: "No comments found for the video." }`  
+  OR  
+  * **Code:** 500  
+  **Content:** `{ message: "Failed to fetch comments.", error: error.message }`
 
-Description: Fetches all comments for a specific post.
-Response: Array of comment objects, each containing comment_id, user_id, post_id, content, and timestamp.
-POST /api/posts/:post_id/comments
+**POST /video**
+----
+  Creates a new User and returns the new object.
+* **URL Params**  
+  None
+* **Headers**  
+  Content-Type: application/json  
+* **Data Params**  
+```
+  {
+    "thumbnail": string,
+    "videourl": string,
+    "title": string
+  }
+```
+* **Success Response:**  
+* **Code:** 200  
+  **Content:**
+  ```
+  [
+    {
+        "_id": ObjectID,
+        "thumbnailurl": string,
+        "videourl": string,
+        "title": string
+    }
+  ]
+  ``` 
 
-Description: Creates a new comment on a specific post.
-Request: JSON object containing user_id and content.
-Response: Comment object of the newly created comment.
-DELETE /api/posts/:post_id/comments/:comment_id
+**POST /video/product**
+----
+  Creates a new User and returns the new object.
+* **URL Params**  
+  None
+* **Headers**  
+  Content-Type: application/json  
+* **Data Params**  
+```
+  {
+    "producturl": string,
+    "title": string,
+    "price": string,
+    "video_id": ObjectID,
+  }
+```
+* **Success Response:**  
+* **Code:** 200  
+  **Content:**
+  ```
+  [
+    {
+        "_id": ObjectID,
+        "producturl": string,
+        "title": string,
+        "price": integer,
+        "video_id": ObjectID,
+    }
+  ]
+  ```
 
-Description: Deletes a comment on a specific post.
-Response: Success message indicating the comment was deleted successfully.
-iii. API Request and Response Format
-For a detailed representation of the API request and response format, please refer to the following Gist link: API Request and Response Format
+  **POST /video/comment**
+----
+  Creates a new User and returns the new object.
+* **URL Params**  
+  None
+* **Headers**  
+  Content-Type: application/json  
+* **Data Params**  
+```
+  {
+    "username": string,
+    "comment": string,
+    "video_id": ObjectID
+  }
+```
+* **Success Response:**  
+* **Code:** 200  
+  **Content:**
+  ```
+  [
+    {
+        "_id": ObjectID,
+        "username": string,
+        "comment": string,
+        "video_id": ObjectID
+    }
+  ]
+  ``` 
 
 iv. How to Run Locally
 To run the API on your local machine, please follow these steps:

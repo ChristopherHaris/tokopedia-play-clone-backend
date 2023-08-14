@@ -25,10 +25,6 @@ const connect = () => {
     });
 };
 
-const corsOptions = {
-    origin: ['*', 'https://superlative-axolotl-e80a61.netlify.app/'],
-  };
-
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());

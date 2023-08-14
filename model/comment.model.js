@@ -1,20 +1,22 @@
-const mongoose = require('mongoose');
-const {Schema} = mongoose;
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-const commentSchema = new Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    comment: {
-        type: String,
-        required: true,
+const commentSchema = new Schema(
+  {
+    user_id: {
+      type: String,
+      required: true,
     },
     video_id: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
-}, { timestamps: { createdAt: 'created_at' } }, {versionKey: false});
+    comment: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: { createdAt: "created_at" }, versionKey: false }
+);
 
-module.exports = mongoose.model('Comment', commentSchema)
+module.exports = mongoose.model("Comment", commentSchema);

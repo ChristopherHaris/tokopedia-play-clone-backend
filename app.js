@@ -7,7 +7,7 @@ const commentRoutes = require("./routes/comment.js");
 const productRoutes = require("./routes/product.js");
 const authRoutes = require("./routes/auth.js");
 const cookieParser = require("cookie-parser");
-var cors = require('cors');
+var cors = require("cors");
 
 dotenv.config();
 
@@ -33,6 +33,12 @@ app.use("/api/user", userRoutes);
 app.use("/api/video", videoRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/product", productRoutes);
+
+app.use((_, res, next) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+  next();
+});
 
 app.listen(PORT, () => {
   connect();

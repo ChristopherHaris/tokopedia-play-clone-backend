@@ -28,7 +28,7 @@ const connect = () => {
 const corsOptions = {
   origin: "https://tokopedia-play-fe.vercel.app", // Replace with your frontend's actual domain
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true, // Allow credentials (cookies, authentication headers)
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -39,12 +39,6 @@ app.use("/api/user", userRoutes);
 app.use("/api/video", videoRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/product", productRoutes);
-
-app.use((_, res, next) => {
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
-  next();
-});
 
 app.listen(PORT, () => {
   connect();

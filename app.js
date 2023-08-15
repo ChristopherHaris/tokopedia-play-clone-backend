@@ -25,7 +25,13 @@ const connect = () => {
     });
 };
 
-app.use(cors());
+const corsOptions = {
+  origin: "https://tokopedia-play-fe.vercel.app", // Replace with your frontend's actual domain
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // Allow credentials (cookies, authentication headers)
+};
+
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRoutes);

@@ -2,6 +2,8 @@
 
 This Readme document provides an overview of the database structure and API architecture for our project. It also includes instructions on how to run the API locally, ensuring that it can easily run on your local machine.
 
+Hosted : tokopedia-play-clone-backend-production.up.railway.app
+
 ## Database Structure
 Our application utilizes a non relational database (MongoDB) to store relevant data. The database is designed with the following structure:
 
@@ -13,6 +15,7 @@ Our application utilizes a non relational database (MongoDB) to store relevant d
 | thumbnailurl | `String`                                     | The URL of the video's thumbnail                 |
 | videourl     | `String`                                     | The URL of the video                             |
 | title        | `String`                                     | The title of the video                           |
+| user_id      | `String`                                     | the id of the owner of the video                 |
 
 ### Products Collection:
 
@@ -20,6 +23,7 @@ Our application utilizes a non relational database (MongoDB) to store relevant d
 | ------------ | -------------------------------------------- | ------------------------------------------------- |
 | _id          | `ObjectID()`                                 | An automatically assigned id by mongodb           |
 | producturl   | `String`                                     | The URL of the product                            |
+| productimg   | `String`                                     | The URL of the product image                      |
 | title        | `String`                                     | The product's name                                |
 | price        | `Integer`                                    | The product's price                               |
 | video_id     | `String`                                     | The ID of the video, in which the products are in |
@@ -29,7 +33,7 @@ Our application utilizes a non relational database (MongoDB) to store relevant d
 |              | Type                                         | Description                                       |
 | ------------ | -------------------------------------------- | ------------------------------------------------- |
 | _id          | `ObjectID()`                                 | An automatically assigned id by mongodb           |
-| username     | `String`                                     | The commenter's name                              |
+| user_id      | `String`                                     | The commenter's id                                |
 | comment      | `String`                                     | The message that are sent                         |
 | video_id     | `String`                                     | The ID of the video, in which the comments are in |
 
@@ -37,7 +41,7 @@ Our application utilizes a non relational database (MongoDB) to store relevant d
 ## API Structure
 Our API follows a RESTful architecture, utilizing HTTP methods for communication. The endpoints are structured as follows:
 
-**GET /video**
+**GET /api/video**
 ----
   Returns all videos in the system.
 * **URL Params**  
@@ -55,13 +59,15 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
         "_id": ObjectID,
         "thumbnailurl": string,
         "videourl": string,
-        "title": string
+        "title": string,
+        "user_id": string
     },
     {
         "_id": ObjectID,
         "thumbnailurl": string,
         "videourl": string,
-        "title": string
+        "title": string,
+        "user_id": string
     }
 ]
 ```
@@ -72,11 +78,11 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
   * **Code:** 500  
   **Content:** `{ message: error.message }`
 
-**GET /video/thumbnail**
+**GET /api/video/search?q**
 ----
-  Returns all thumbnail in the system.
+  Returns a videos using query in the system.
 * **URL Params**  
-  None
+  *Required:* `q=[string]`
 * **Data Params**  
   None
 * **Headers**  
@@ -88,11 +94,17 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
 [
     {
         "_id": ObjectID,
-        "thumbnailurl": string
+        "thumbnailurl": string,
+        "videourl": string,
+        "title": string,
+        "user_id": string
     },
     {
         "_id": ObjectID,
-        "thumbnailurl": string
+        "thumbnailurl": string,
+        "videourl": string,
+        "title": string,
+        "user_id": string
     }
 ]
 ```
@@ -103,11 +115,11 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
   * **Code:** 500  
   **Content:** `{ message: "Failed to fetch thumbnails.", error: error.message }`
 
-**GET /video/:id**
+**GET /api/video/:videoId**
 ----
   Returns a specific video.
 * **URL Params**  
-  *Required:* `id=[string]`
+  *Required:* `videoId=[string]`
 * **Data Params**  
   None
 * **Headers**  
@@ -120,7 +132,8 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
     "_id": ObjectID,
     "thumbnailurl": string,
     "videourl": string,
-    "title": string
+    "title": string,
+    "user_id": string
 }
 ``` 
 * **Error Response:**  
@@ -130,36 +143,11 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
   * **Code:** 500  
   **Content:** `{ message: error.message }`
 
-**GET /video/thumbnail/:id**
-----
-  Returns a specific thumbnail.
-* **URL Params**  
-  *Required:* `id=[string]`
-* **Data Params**  
-  None
-* **Headers**  
-  Content-Type: application/json  
-* **Success Response:**  
-* **Code:** 200  
-  **Content:**  
-```
-{
-    "_id": ObjectID,
-    "thumbnailurl": string
-}
-```
-* **Error Response:**  
-  * **Code:** 404  
-  **Content:** `{ message: "Thumbnail not found." }`  
-  OR  
-  * **Code:** 500  
-  **Content:** `{ message: "Failed to fetch thumbnail.", error: error.message }`
-
-**GET /video/product/:id**
+**GET /api/product/:videoId**
 ----
   Returns all product from the specified video.
 * **URL Params**  
-  *Required:* `id=[string]`
+  *Required:* `videoId=[string]`
 * **Data Params**  
   None
 * **Headers**  
@@ -172,14 +160,18 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
     {
         "_id": ObjectID,
         "producturl": string,
+        "productimg": string,
         "title": string,
-        "price": integer
+        "price": integer,
+        "video_id": string
     },
     {
         "_id": ObjectID,
         "producturl": string,
+        "productimg": string,
         "title": string,
-        "price": integer
+        "price": integer,
+        "video_id": string
     }
 ]
 ```
@@ -190,11 +182,11 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
   * **Code:** 500  
   **Content:** `{ message: "Failed to fetch products.", error: error.message }`
 
-**GET /video/comment/:id**
+**GET /api/comment/:videoId**
 ----
   Returns all comments from the specified video.
 * **URL Params**  
-  *Required:* `id=[string]`
+  *Required:* `videoId=[string]`
 * **Data Params**  
   None
 * **Headers**  
@@ -206,13 +198,13 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
 [
     {
         "_id": ObjectID,
-        "username": string,
+        "user_id": string,
         "comment": string,
         "created_at": Date(),
     },
     {
         "_id": ObjectID,
-        "username": string,
+        "user_id": string,
         "comment": string,
         "created_at": Date(),
     }
@@ -225,7 +217,7 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
   * **Code:** 500  
   **Content:** `{ message: "Failed to fetch comments.", error: error.message }`
 
-**POST /video**
+**POST /api/video**
 ----
   Creates a new User and returns the new object.
 * **URL Params**  
@@ -235,7 +227,7 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
 * **Data Params**  
 ```
   {
-    "thumbnail": string,
+    "thumbnailurl": string,
     "videourl": string,
     "title": string
   }
@@ -254,7 +246,7 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
   ]
   ``` 
 
-**POST /video/product**
+**POST /api/product**
 ----
   Creates a new User and returns the new object.
 * **URL Params**  
@@ -265,6 +257,7 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
 ```
   {
     "producturl": string,
+    "productimg": string,
     "title": string,
     "price": string,
     "video_id": ObjectID,
@@ -278,6 +271,7 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
     {
         "_id": ObjectID,
         "producturl": string,
+        "productimg": string,
         "title": string,
         "price": integer,
         "video_id": ObjectID,
@@ -285,7 +279,7 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
   ]
   ```
 
-**POST /video/comment**
+**POST /api/comment**
 ----
   Creates a new User and returns the new object.
 * **URL Params**  
@@ -295,7 +289,7 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
 * **Data Params**  
 ```
   {
-    "username": string,
+    "user_id": ObjectID,
     "comment": string,
     "video_id": ObjectID
   }
@@ -307,7 +301,7 @@ Our API follows a RESTful architecture, utilizing HTTP methods for communication
   [
     {
         "_id": ObjectID,
-        "username": string,
+        "user_id": ObjectID,
         "comment": string,
         "video_id": ObjectID
     }

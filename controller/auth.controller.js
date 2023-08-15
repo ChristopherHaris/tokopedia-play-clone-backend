@@ -36,6 +36,8 @@ const signIn = async (req, res) => {
     res
       .cookie("access_token", token, {
         httpOnly: true,
+        sameSite: "none", // Set SameSite attribute
+        secure: true,
       })
       .status(200)
       .json(others);
@@ -53,6 +55,8 @@ const googleAuth = async (req, res) => {
       res
         .cookie("access_token", token, {
           httpOnly: true,
+          sameSite: "none", // Set SameSite attribute
+          secure: true,
         })
         .status(200)
         .json({ ...user._doc, token });
@@ -67,6 +71,8 @@ const googleAuth = async (req, res) => {
       res
         .cookie("access_token", token, {
           httpOnly: true,
+          sameSite: "none", // Set SameSite attribute
+          secure: true,
         })
         .status(201)
         .json({ ...savedUser._doc, token });
